@@ -1,0 +1,1516 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>JavaScript Horror Show</title>
+
+  <meta name="description"
+        content="Slides of my talk about common pitfalls in JS">
+  <meta name="author" content="Enrique Amodeo">
+
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"/>
+
+  <link rel="stylesheet" href="reveal.js-2.1/css/reveal.css">
+  <link rel="stylesheet" href="reveal.js-2.1/css/theme/default.css" id="theme">
+
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="reveal.js-2.1/lib/css/zenburn.css">
+
+  <style>
+      /* Aside */
+    .left {
+      float: left;
+    }
+
+    img.left {
+      margin: 0;
+      padding: 0;
+      width: 25%;
+    }
+
+    img.left + ul {
+      margin: 0;
+      width: 60%;
+    }
+
+      /* Figures with captions */
+    .reveal section figure {
+      position: relative;
+      margin: 0 auto;
+      padding: 0;
+      width: 600px;
+      height: 400px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .reveal section figure > img {
+      width: 100%;
+      max-height: none;
+      border-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .reveal section figure > figcaption {
+      position: absolute;
+      bottom: 0.5em;
+      left: 0;
+      width: 100%;
+      border-style: none;
+      border-width: 0;
+      margin: 0;
+      padding: 0;
+      background-color: rgb(37, 33, 28);
+      background-color: rgba(37, 33, 28, 0.5);
+      font-size: 0.4em;
+      text-align: center;
+    }
+
+    .reveal section figure > figcaption {
+      line-height: 1.5em;
+      vertical-align: middle;
+    }
+
+    .reveal section figure > figcaption a {
+      line-height: 1.5em !important;
+    }
+
+      /* Cover */
+    .reveal section.cover footer {
+      line-height: 33px;
+      clear: both;
+    }
+
+    .reveal section.cover > footer {
+      position: absolute;
+      bottom: 0.5em;
+      left: 0;
+      border-style: none;
+      border-width: 0;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background-color: rgb(37, 33, 28);
+      background-color: rgba(37, 33, 28, 0.5);
+      font-size: 0.4em;
+      text-align: center;
+    }
+
+    .reveal section.cover footer img {
+      float: left;
+      margin: 0 1em 0 0;
+      padding: 0;
+      cursor: pointer;
+      border-style: none;
+    }
+
+    .reveal section.cover footer a,
+    .reveal section.cover footer span {
+      margin: 0;
+      padding: 0;
+      vertical-align: baseline;
+      line-height: 33px;
+    }
+
+      /* Separata */
+    .reveal section.separata hgroup {
+      margin-top: 0.5em;
+    }
+
+    .reveal section.separata hgroup h2,
+    .reveal section.separata hgroup h3,
+    .reveal section.separata hgroup h4 {
+      color: #F0F1EB;
+      text-shadow: #111150 0px 0px 0.2em;
+    }
+
+    .reveal section.separata figure {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .reveal section.separata figure > img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-style: none;
+      border-width: 0;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      z-index: -1;
+    }
+
+      /* Animation */
+    div.animation-container {
+      position: relative;
+      margin: 0 auto;
+      padding: 0;
+      width: 809px;
+      height: 399px;
+      background-color: transparent;
+      -moz-box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 6px 0px;
+      -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 6px 0px;
+      box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 6px 0px;
+      overflow: hidden;
+    }
+
+    .animation-container .frame,
+    .animation-container .frame > img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 0;
+      border-style: none;
+      padding: 0;
+      margin: 0;
+      min-width: 100%;
+      max-width: none;
+      max-height: none;
+      box-shadow: none
+    }
+
+    .animation-container .frame > img.loader {
+      position: absolute;
+      top: 140px;
+      left: 180px;
+      border: 0;
+      border-style: none;
+      padding: 0;
+      margin: 0;
+      width: 126px;
+      min-width: 126px;
+      box-shadow: none;
+    }
+
+    .snippet {
+      font-family: monospace !important;
+    }
+
+    pre code {
+      background-color: #F0F0F0 !important;
+      color: #000000 !important;
+    }
+    pre code .literal, pre code .title {
+      color: #F00000 !important;
+    }
+    pre code .keyword {
+      color: #0000F0 !important;
+    }
+  </style>
+  <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+  <script>
+    document.write('<link rel="stylesheet" href="reveal.js-2.1/css/print/' + ( window.location.search.match(/print-pdf/gi) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">');
+  </script>
+
+  <!--[if lt IE 9]>
+  <script src="reveal.js-2.1/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+<!-- Any section element inside of this container is displayed as a slide -->
+<div class="slides">
+
+<section class="cover">
+  <h1>JavaScript</h1>
+  <h1>Horror Show</h1>
+
+  <h3>(things your mother didn't dare to tell you)</h3>
+
+  <p>
+    <small>By <a
+            href="http://eamodeorubio.wordpress.com/about/">Enrique
+      Amodeo</a> /
+      <a href="http://twitter.com/eamodeorubio">@eamodeorubio</a></small>
+  </p>
+  <footer>
+    <a rel="license"
+       href="http://creativecommons.org/licenses/by-nc-sa/2.0/">
+      <img alt="Creative Commons License"
+           src="http://i.creativecommons.org/l/by-nc-sa/2.0/88x31.png"/>
+    </a>
+    <span>This work is licensed under a </span>
+    <a rel="license"
+       href="http://creativecommons.org/licenses/by-nc-sa/2.0/">
+      Creative Commons Attribution-NonCommercial-ShareAlike 2.0 Generic
+      License
+    </a>
+  </footer>
+</section>
+
+<section>
+  <h2>Enrique Amodeo</h2>
+  <h4>(who is this guy?)</h4>
+
+  <img src="img/EnriqueAmodeo.jpg" class="left"
+       alt="[Enrique Amodeo, circa 2010]">
+  <ul>
+    <li>Working as a professional since 2000</li>
+    <li>Worked with JAVA/JEE and big companies</li>
+    <li>Has loved JS since 2005</li>
+    <li>Test infected</li>
+    <li>Enthusiast of the Agile/Lean way</li>
+    <li>Now Freelancing</li>
+    <li>Follow me at
+      <a href="https://twitter.com/eamodeorubio">@eamodeorubio</a></li>
+  </ul>
+</section>
+
+<section >
+  <h2>Be warned !</h2>
+
+  <h3>(explicit JS inside this talk!)</h3>
+
+  <img src="./img/parental_advisory_explicit_content_lge_logo.gif">
+</section>
+
+<section>
+  <h2>This talk</h2>
+  <ol>
+    <li>Type coercion hell</li>
+    <li>Scary operators</li>
+    <li>Invasion of the Body Snatchers</li>
+    <li>Functional gore</li>
+  </ol>
+</section>
+
+<section class="separata">
+  <hgroup>
+    <h2>Type coercion hell</h2>
+
+    <h3>(burn developer, burn!)</h3>
+  </hgroup>
+  <figure>
+    <img src="./img/fire.jpg">
+    <figcaption>
+      <span>Original by Dave Hogg:</span>
+      <a href="http://www.flickr.com/photos/davehogg/74341943/in/pool-47119822@N00/"
+         target="_blank">http://bit.ly/ZFFbdk</a>
+    </figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>The types in JS</h2>
+  <h4>(it's easy)</h4>
+
+  <ul class="snippet">
+    <li>undefined</li>
+    <li>boolean<sup>*</sup></li>
+    <li>number<sup>*</sup></li>
+    <li>string<sup>*</sup></li>
+    <li style="line-height: 2em">object</li>
+    <li style="line-height: 2em">function</li>
+  </ul>
+  <p class="fragment"><sup>*</sup>These can have objects & primitive values</p>
+</section>
+
+<section>
+  <h2>Type conversions</h2>
+  <h4>(looks harmful)</h4>
+
+  <ul class="snippet">
+    <li>Boolean(expr)</li>
+    <li>[[ToPrimitive(expr, hint)]]</li>
+    <li>Number(expr)</li>
+    <li>String(expr)</li>
+    <li>There are more...</li>
+  </ul>
+</section>
+
+<section>
+  <h2><em>Automatic</em> Type conversion</h2>
+  <h4>(the JS interpreter is a smart ass)</h4>
+
+  <p class="fragment">What conversion will be used?</p>
+  <p class="fragment">Ehem, it depends on...</p>
+  <ul class="fragment">
+    <li>What type is the interpreter expecting</li>
+    <li>The operator in the expression</li>
+    <li class="fragment">The position of the Moon in the Sky...</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Truthy & Falsy</h2>
+
+  <pre><code contenteditable>
+    function sayHi(x) {
+      if (!x)
+        return console.log('Bye');
+      console.log('Hi');
+    }
+    //What will this print?
+    sayHi(false);
+    sayHi(null);
+    sayHi([]);
+    sayHi(new Boolean(false));
+  </code></pre>
+</section>
+
+<section>
+  <h2>Truthy & Falsy</h2>
+
+  <pre><code contenteditable>
+    function sayHi(x) {
+      if (!x)
+        return console.log('Bye');
+      console.log('Hi');
+    }
+    //What will this print?
+    sayHi(false); // #=> 'Bye'
+    sayHi(null); // #=> 'Bye'
+    sayHi([]); // #=> 'Hi'
+    sayHi(new Boolean(false)); // #=> 'Hi'
+  </code></pre>
+</section>
+
+<section>
+  <h2>Boolean(expr)</h2>
+  <h4>(falsy values)</h4>
+
+  <p>Everything is converted to <span
+          class="snippet">true</span>, except...</p>
+  <ul class="fragment snippet">
+    <li>false</li>
+    <li>null</li>
+    <li>undefined</li>
+    <li>NaN</li>
+    <li>0</li>
+    <li>""</li>
+  </ul>
+  <p class="fragment">What about<span class="snippet"> new Boolean(false)</span>
+    ?</p>
+</section>
+
+<section>
+  <h2>typeof expr</h2>
+  <h4>(which is the type of expr?)</h4>
+
+  <ul class="snippet">
+    <li class="fragment">typeof false -> 'boolean'</li>
+    <li class="fragment">typeof 'false' -> 'string'</li>
+    <li class="fragment">typeof new Object() -> 'object'</li>
+    <li class="fragment">typeof new Boolean(false) -> 'object'</li>
+    <li class="fragment">Boolean(new Boolean(false)) -> true</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Number(expr)</h2>
+  <h4>(basic cases)</h4>
+
+  <ol class="snippet">
+    <li class="fragment">undefined -> NaN</li>
+    <li class="fragment">null -> 0</li>
+    <li class="fragment">false -> 0, true -> 1</li>
+    <li class="fragment">"" -> 0</li>
+    <li class="fragment">"23.23e+2" -> 2323</li>
+    <li class="fragment">"23.23sss" -> NaN</li>
+  </ol>
+</section>
+
+<section>
+  <h2>String(expr)</h2>
+  <h4>(basic cases)</h4>
+
+  <ol class="snippet">
+    <li class="fragment">undefined -> 'undefined'</li>
+    <li class="fragment">null -> 'null'</li>
+    <li class="fragment">false -> 'false', true -> 'true'</li>
+    <li class="fragment">23.23e+2 -> '2323'</li>
+    <li class="fragment">222e22 -> '2.22e+24'</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Number(expr) & String(expr)</h2>
+  <h4>(if expr is an object)</h4>
+
+  <ol class="snippet">
+    <li class="fragment">Number(obj) ->
+      <p>Number(ToPrimitive(obj,'number'))</p></li>
+    <li class="fragment">String(obj) ->
+      <p>String(ToPrimitive(obj,'string'))</p></li>
+  </ol>
+  <p class="fragment"><span class="snippet">ToPrimitive</span>?? What is
+    that?</p>
+</section>
+
+<section>
+  <h2>ToPrimitive(expr, hint)</h2>
+  <h4>(hint is 'number')</h4>
+
+  <ol>
+    <li class="fragment">Has a <span class="snippet">valueOf()</span> method?
+      <p>return
+        <span class="snippet">obj.valueOf()<sup>*</sup></span></p></li>
+    <li class="fragment">Otherwise
+      <p>return <span class="snippet">obj.toString()<sup>*</sup></span></p></li>
+  </ol>
+  <p class="fragment"><sup>*</sup>Fail if <span class="snippet">toString</span>
+    or
+    <span class="snippet">valueOf</span> returns a non primitive</p>
+</section>
+
+<section>
+  <h2>ToPrimitive(expr, hint)</h2>
+  <h4>(hint is 'string')</h4>
+
+  <ol>
+    <li class="fragment">Has a <span class="snippet">toString()</span> method?
+      <p>return
+        <span class="snippet">obj.toString()<sup>*</sup></span></p></li>
+    <li class="fragment">Otherwise
+      <p>return <span class="snippet">obj.valueOf()<sup>*</sup></span></p></li>
+  </ol>
+  <p class="fragment"><sup>*</sup>Fail if <span class="snippet">toString</span>
+    or
+    <span class="snippet">valueOf</span> returns a non primitive</p>
+</section>
+
+<section>
+  <h2>ToPrimitive(expr, hint)</h2>
+  <h4>(no hint)</h4>
+
+  <ol class="snippet">
+    <li class="fragment">Is expr a Date object?
+      <p>return ToPrimitive(expr, 'string')</p></li>
+    <li class="fragment">Otherwise
+      <p>return ToPrimitive(expr, 'number')</p></li>
+  </ol>
+</section>
+
+<section>
+  <h2>Automatic fancy conversions</h2>
+  <h4>(know what the operators expect)</h4>
+
+  <ol class="snippet">
+    <li>if(expr) -> if(Boolean(expr))</li>
+    <li>a - b -> Number(a) - Number(b)</li>
+    <li>a * b -> Number(a) * Number(b)</li>
+    <li>a / b -> Number(a) / Number(b)</li>
+    <li>a && b -> Boolean(a) && Boolean(b)<sup>*</sup></li>
+    <li>a || b -> Boolean(a) || Boolean(b)<sup>*</sup></li>
+    <li>! a -> ! Boolean(a)</li>
+  </ol>
+  <p><sup>*</sup>Not exactly...</p>
+</section>
+
+<section class="separata">
+  <hgroup>
+    <h2>Scary operators</h2>
+
+    <h3>(run for your lives!)</h3>
+  </hgroup>
+  <figure>
+    <img src="./img/scared.jpg">
+    <figcaption>
+      <span>Original by Jimmy Bramlett:</span>
+      <a href="http://www.flickr.com/photos/artindeepkoma/54235257/"
+         target="_blank">http://bit.ly/Xop0TG</a>
+    </figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>What do you expect?</h2>
+  <h4>(the + operator)</h4>
+
+  <pre><code contenteditable>    var a = {
+      valueOf:function() {
+        console.log("valueOf a");
+        return "1";
+      }
+    };
+    var b = {
+      valueOf:function() {
+        console.log("valueOf b");
+        return "2";
+      }
+    };
+    console.log(a + b);
+    console.log(b + a);
+    console.log(a - b);
+    console.log(b - a);
+    console.log(+a);</code></pre>
+</section>
+
+<section>
+  <h2>What do you expect?</h2>
+  <h4>(the + operator)</h4>
+
+  <pre><code contenteditable>    var a = {
+      valueOf:function() {
+        console.log("valueOf a");
+        return "1";
+      }
+    };
+    var b = {
+      valueOf:function() {
+        console.log("valueOf b");
+        return "2";
+      }
+    };
+    console.log(a + b); // #=> '12'
+    console.log(b + a); // #=> '21'
+    console.log(a - b); // #=> -1
+    console.log(b - a); // #=> 1
+    console.log(+a); // #=> 1</code></pre>
+</section>
+
+<section>
+  <h2>The + operator</h2>
+  <h4>(your best friend)</h4>
+
+  <ol class="snippet">
+    <li class="fragment">(unary) +a -> Number(a)</li>
+    <li class="fragment">a + "hola" -> String(a) + "hola"</li>
+    <li class="fragment">"hola" + a -> "hola" + String(b)</li>
+    <li class="fragment">a + 6 -> Number(a) + 6</li>
+    <li class="fragment">6 + a -> 6 + Number(b)</li><li class="fragment">a + b
+    <p>-> ToPrimitive(a) + ToPrimitive(b)</p></li>
+  </ol>
+</section>
+
+<section>
+  <h2>Comparision operators</h2>
+  <h4>(almost like +)</h4>
+
+  <ol class="snippet">
+    <li class="fragment">1 &lt; 2 -> true</li>
+    <li class="fragment">"ab" &lt; "aa" -> true (lexical order)</li>
+    <li class="fragment">a &lt; 6 -> Number(a) &lt; 6</li>
+    <li class="fragment">6 &lt; a -> 6 &lt; Number(b)</li>
+    <li class="fragment">a &lt; b
+      <p>-> ToPrimitive(a) &lt; ToPrimitive(b)</p></li>
+    <li class="fragment"><span class="snippet">&lt;=, &gt;, &gt;=</span> defined in
+      terms of <span class="snippet">&lt;</span></li>
+  </ol>
+</section>
+
+<section>
+  <h2>What do you expect?</h2>
+  <h4>(some classics)</h4>
+
+  <pre><code contenteditable>    var a = {
+      valueOf: function () {
+        return "2";
+      }
+    };
+    console.log(1 == '1');
+    console.log(1 == true);
+    console.log(0 == '');
+    console.log(null == null);
+    console.log(null == undefined);
+    console.log(null == '');
+    console.log(null == 0);
+    console.log(NaN == NaN);
+    console.log(a == 2);
+    console.log(a == true);
+    console.log(a == false);</code></pre>
+</section>
+
+<section>
+  <h2>What do you expect?</h2>
+  <h4>(some classics)</h4>
+
+  <pre><code contenteditable>    var a = {
+      valueOf: function () {
+        return "2";
+      }
+    };
+    console.log(1 == '1'); // #=> true
+    console.log(1 == true); // #=> true
+    console.log(0 == ''); // #=> true
+    console.log(null == null); // #=> true
+    console.log(null == undefined); // #=> true
+    console.log(null == ''); // #=> false
+    console.log(null == 0); // #=> false
+    console.log(NaN == NaN); // #=> false
+    console.log(a == 2); // #=> true
+    console.log(a == true); // #=> false
+    console.log(a == false); // #=> false</code></pre>
+</section>
+
+<section>
+  <h2>The == operator</h2>
+  <h4>(love it!)</h4>
+
+  <ol class="snippet">
+    <li class="fragment">null == undefined</li>
+    <li class="fragment">undefined == null</li>
+    <li class="fragment">NaN == x is always false</li>
+    <li class="fragment">15.2 == 15.2</li>
+    <li class="fragment">'juan' == 'juan'</li>
+    <li class="fragment">primA == primB ->
+      <p>Number(primA) == Number(primB)</p></li>
+    <li class="fragment">ob1 == ob2 ->
+      <p>ToPrimitive(ob1)==ToPrimitive(ob2)</p></li>
+  </ol>
+</section>
+
+<section>
+  <h2>The === operator</h2>
+  <h4>(use almost always)</h4>
+
+  <pre><code contenteditable>    var a = {
+      valueOf: function () {
+        return "2";
+      }
+    };
+    console.log(1 === '1');
+    console.log(1 === true);
+    console.log(0 === '');
+    console.log(null === null);
+    console.log(null === undefined);
+    console.log(null === '');
+    console.log(null === 0);
+    console.log(NaN === NaN);
+    console.log(a === 2);
+    console.log(a === true);
+    console.log(a === false);</code></pre>
+</section>
+
+<section>
+  <h2>The === operator</h2>
+  <h4>(use almost always)</h4>
+
+  <pre><code contenteditable>    var a = {
+      valueOf: function () {
+        return "2";
+      }
+    };
+    console.log(1 === '1'); // #=> false
+    console.log(1 === true); // #=> false
+    console.log(0 === ''); // #=> false
+    console.log(null === null); // #=> true
+    console.log(null === undefined); // #=> false
+    console.log(null === ''); // #=> false
+    console.log(null === 0); // #=> false
+    console.log(NaN === NaN); // #=> false !!!!!
+    console.log(a === 2); // #=> false
+    console.log(a === true); // #=> false
+    console.log(a === false); // #=> false</code></pre>
+</section>
+
+<section>
+  <h2>The && and || operators</h2>
+  <h4>(bet you don't expect this)</h4>
+
+  <pre><code contenteditable>
+    console.log(true && false);
+    console.log(false || true);
+    console.log(Boolean(true && "pepe"));
+    if (true && "pepe")
+      console.log("true, of course!");
+    console.log(Boolean(false || "pepe"));
+    if (false || "pepe")
+      console.log("true again, of course!");
+    console.log(!(true && "pepe"));
+    console.log(!(false || "pepe"));
+    console.log(true && "pepe");
+    console.log(false || "pepe");
+  </code></pre>
+</section>
+
+<section>
+  <h2>The && and || operators</h2>
+  <h4>(bet you don't expect this)</h4>
+
+  <pre><code contenteditable>
+    console.log(true && false); // #=> false
+    console.log(false || true); // #=> true
+    console.log(Boolean(true && "pepe")); // #=> 'pepe'
+    if (true && "pepe")
+      console.log("true, of course!"); // Executed
+    console.log(Boolean(false || "pepe")); // #=> 'pepe'
+    if (false || "pepe")
+      console.log("true again, of course!"); // Executed
+    console.log(!(true && "pepe")); // #=> false
+    console.log(!(false || "pepe")); // #=> false
+    console.log(true && "pepe"); // #=> 'pepe'
+    console.log(false || "pepe"); // #=> 'pepe'
+  </code></pre>
+</section>
+
+<section>
+  <h2>The && and || operators</h2>
+  <h4>(the nasty truth)</h4>
+
+  <p class="fragment">They do shortcircuit evaluation</p>
+  <p class="fragment">They do not return a boolean</p>
+  <p class="fragment">They do <em>NOT RETURN A BOOLEAN</em>...</p>
+  <p class="fragment">...but the last evaluated expression</p>
+</section>
+
+<section>
+  <h2>The comma operator</h2>
+  <h4>(very important)</h4>
+
+  <pre><code contenteditable>
+    function rubyish(x) {
+      return  a = !x,
+              b = 22,
+              console.log("Some 'statement' here"),
+              a + b;
+    }
+    console.log(rubyish(true));
+    for (var i = 0, j;
+          i < 10;
+          j ? j : j = 0,
+          console.log(j),
+          i++,
+          j = i * 2);
+  </code></pre>
+</section>
+
+<section>
+  <h2>The void operator</h2>
+  <h4>(very useful)</h4>
+
+  <pre><code contenteditable>    var helloWorld = void function() {
+      return 'Hello world';
+    };
+    console.log(helloWorld());</code></pre>
+  <pre class="fragment"><code contenteditable>    var helloWorld = function (x) {
+      if (x === undefined) return 'Hello world';
+      return 'HaHaHa!';
+    };
+    console.log(helloWorld()); // 'Hello world'
+    var undefined = true;
+    console.log(helloWorld()); // 'HaHaHa'
+    var helloWorld2 = function (x) {
+      if (x === void 0) return 'Hello world';
+      return 'HaHaHa!';
+    };
+    console.log(helloWorld2()); // 'Hello world'</code></pre>
+</section>
+
+<section class="separata">
+  <hgroup>
+    <h2>Invasion of the Body Snatchers</h2>
+
+    <h3>(don't fall asleep)</h3>
+  </hgroup>
+  <figure>
+    <img src="./img/thepod.jpg">
+    <figcaption>
+      <span>Original by BY-YOUR-âŒ˜:</span>
+      <a href="http://www.flickr.com/photos/aparejador/2897007239/"
+         target="_blank">http://bit.ly/12M9bs3</a>
+    </figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Hashes</h2>
+  <h4>(every language has them!)</h4>
+
+  <pre><code contenteditable>
+    var hash = {},
+        key1 = {},
+        key2 = [];
+
+    hash[1] = "Uno (number)";
+    hash["juan"] = "John";
+    hash[key1] = "Key 1 value";
+    hash[key2] = "Key 2 value";
+
+    console.log(hash[1]);
+    console.log(hash["juan"]);
+    console.log(hash[key1]);
+    console.log(hash[key2]);
+  </code></pre>
+</section>
+
+<section>
+  <h2>Hashes</h2>
+  <h4>(every language has them!)</h4>
+
+  <pre><code contenteditable>
+    var hash = {},
+        key1 = {},
+        key2 = [];
+
+    hash[1] = "Uno (number)";
+    hash["juan"] = "John";
+    hash[key1] = "Key 1 value";
+    hash[key2] = "Key 2 value";
+
+    console.log(hash[1]); // #=> 'Uno (number)'
+    console.log(hash["juan"]); // #=> 'John'
+    console.log(hash[key1]); // #=> 'Key 1 value'
+    console.log(hash[key2]); // #=> 'Key 2 value'
+  </code></pre>
+</section>
+
+<section>
+  <h2>Hashes</h2>
+  <h4>(but JS has surprises!)</h4>
+
+  <pre><code contenteditable>
+    var hash = {},
+        key1 = {},
+        key3 = { name: "juan" },
+        key4 = ["juan"];
+
+    hash["1"] = "Uno (string)";
+    hash[key3] = "Mary";
+    hash[key4] = "Beth";
+
+    console.log(hash["1"]);
+    console.log(hash[1]);
+    console.log(hash[key3], hash[key1]);
+    console.log(hash[key4], hash["juan"]);
+  </code></pre>
+</section>
+
+<section>
+  <h2>Hashes</h2>
+  <h4>(but JS has surprises!)</h4>
+
+  <pre><code contenteditable>
+    var hash = {},
+        key1 = {},
+        key3 = { name: "juan" },
+        key4 = ["juan"];
+
+    hash["1"] = "Uno (string)";
+    hash[key3] = "Mary";
+    hash[key4] = "Beth";
+
+    console.log(hash["1"]);// 'Uno (string)'
+    console.log(hash[1]);// 'Uno (string)'
+    console.log(hash[key3], hash[key1]);// 'Mary', 'Mary'
+    console.log(hash[key4], hash["juan"]);// 'Beth', 'Beth'
+  </code></pre>
+</section>
+
+<section>
+  <h2>Hashes</h2>
+  <h4>(the nasty truth)</h4>
+
+  <p class="fragment">They do not exist</p>
+  <p class="fragment snippet">typeof {} == 'object'</p>
+  <p class="fragment">Objects are key/value pairs</p>
+  <p class="fragment">Value can be any expression</p>
+  <p class="fragment">Only strings are allowed as keys</p>
+  <p class="fragment snippet">obj.propName -> obj['propName']</p>
+  <p class="fragment snippet">obj[expr] -> obj[String(expr)]</p>
+</section>
+
+<section>
+  <h2>Arrays/Lists</h2>
+  <h4>(I know they exist!)</h4>
+
+  <pre><code contenteditable>    var arr = [];
+    console.log(arr.length);
+    arr[0] = "First";
+    console.log(arr.length, arr[0], arr[1]);
+    arr[2] = "Third";
+    console.log(arr.length, arr[1], arr[2]);
+    arr["name"] = "Cool array";
+    console.log(arr.length, arr["name"]);
+    arr["5"] = "Weird property";
+    console.log(arr.length, arr["5"]);
+    var key1 = {
+      toString: function () {
+        return "0";
+      }
+    };
+    arr[key1] = "First again";
+    console.log(arr.length, arr[0]);</code></pre>
+</section>
+
+<section>
+  <h2>Arrays/Lists</h2>
+  <h4>(I know they exist!)</h4>
+
+  <pre><code contenteditable>var arr = [];
+console.log(arr.length);//0
+arr[0] = "First";
+console.log(arr.length,arr[0],arr[1]);//1,'First',undefined
+arr[2] = "Third";
+console.log(arr.length,arr[1],arr[2]);//3,undefined,'Third'
+arr["name"] = "Cool array";
+console.log(arr.length, arr["name"]);//3,'Cool array'
+arr["5"] = "Weird property";
+console.log(arr.length,arr["5"]);//6,'Weird property'
+var key1 = {
+  toString: function () {
+    return "0";
+  }
+};
+arr[key1] = "First again";
+console.log(arr.length, arr[0]);//6,'First again'</code></pre>
+</section>
+
+<section>
+  <h2>Arrays</h2>
+  <h4>(the nasty truth)</h4>
+
+  <p class="fragment">They do not exist</p>
+  <p class="fragment snippet">typeof [] == 'object'</p>
+  <p class="fragment">Only strings can be indexes</p>
+  <p class="fragment snippet">obj[index] -> obj[String(index)]</p>
+</section>
+
+<section>
+  <h2>"Arrays"</h2>
+  <h4>(at least they feel like one)</h4>
+
+  <pre><code contenteditable>
+    var arr = ["First", "Second", "Third"];
+    console.log(arr.length, arr);
+    arr.length--;
+    console.log(arr.length, arr);
+    arr.length++;
+    console.log(arr.length, arr);
+  </code></pre>
+</section>
+
+<section>
+  <h2>"Arrays"</h2>
+  <h4>(at least they feel like one)</h4>
+
+  <pre><code contenteditable>
+    var arr = ["First", "Second", "Third"];
+    console.log(arr.length, arr);
+    // #=> 3, ["First", "Second", "Third"]
+    arr.length--;
+    console.log(arr.length, arr);
+    // #=> 2, ["First", "Second"]
+    arr.length++;
+    console.log(arr.length, arr);
+    // #=> 3, ["First", "Second", undefined]
+  </code></pre>
+</section>
+
+<section>
+  <h2>Loops</h2>
+
+  <pre><code contenteditable>    var arr = ["First", "Second", "Third"],
+        obj = {
+          "0": "1st",
+          "1": "2nd",
+          "2": "3rd",
+          "length": 3,
+          "name": "My name",
+          "age": 22
+        }, p;
+    arr.name = "Cool!";
+    for (p in arr)
+      console.log(p);
+    for (p in obj)
+      console.log(p);</code></pre>
+  <pre class="fragment"><code contenteditable>    for (p = 0; p < arr.length; p++)
+      console.log(arr[p]);
+    for (p = 0; p < obj.length; p++)
+      console.log(obj[p]);</code></pre>
+</section>
+
+<section class="separata">
+  <hgroup>
+    <h2>Functional gore</h2>
+
+    <h3>(a bit of spicy sauce)</h3>
+  </hgroup>
+  <figure>
+    <img src="./img/callos.jpg">
+    <figcaption>
+      <span>Original by Javier Lastras:</span>
+      <a href="http://www.flickr.com/photos/jlastras/5716582294/"
+         target="_blank">http://bit.ly/VmNWty</a>
+    </figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Spooky vars</h2>
+  <h4>(Scope)</h4>
+
+  <pre><code contenteditable>
+    var outer = 'Hi there!';
+    function fn(){
+      var inner="I'm local";
+      console.log(inner, outer);
+      if(true) {
+        var other="other local";
+        console.log(other);
+      }
+      console.log(other);
+    }
+    fn();
+  </code></pre>
+</section>
+
+<section>
+  <h2>Spooky vars</h2>
+  <h4>(Scope)</h4>
+
+  <pre><code contenteditable>
+    var outer = 'Hi there!';
+    function fn(){
+      var inner="I'm local";
+      console.log(inner, outer); // "I'm local", 'Hi there!'
+      if(true) {
+        var other="other local";
+        console.log(other);  // 'other local'
+      }
+      console.log(other); // 'other local'
+    }
+    fn();
+  </code></pre>
+</section>
+
+<section>
+  <h2>Spooky vars</h2>
+  <h4>(Hoisting)</h4>
+
+  <pre><code contenteditable>
+    var x = 'Hi there !';
+    function fn(){
+      console.log( x );
+      var x = 'New Value';
+      console.log( x );
+    }
+    fn();
+  </code></pre>
+</section>
+
+<section>
+  <h2>Spooky vars</h2>
+  <h4>(Hoisting)</h4>
+
+  <pre><code contenteditable>
+    var x = 'Hi there !';
+    function fn(){
+      console.log( x ); // undefined
+      var x = 'New Value';
+      console.log( x ); // 'New value'
+    }
+    fn();
+  </code></pre>
+</section>
+
+<section>
+  <h2>Named Function Expressions</h2>
+  <h4>(we don't need Y-Combinator)</h4>
+  <pre><code contenteditable>
+    var sum = function sum(n) {
+      if (!n)
+        return 0;
+      return n + sum(n - 1);
+    };
+    console.log(sum(4));
+    var sum2 = sum;
+    sum = function () {
+      return 0;
+    };
+    console.log(sum(4));
+    console.log(sum2(4));
+  </code></pre>
+</section>
+
+<section>
+  <h2>Named Function Expressions</h2>
+  <h4>(we don't need Y-Combinator)</h4>
+  <pre><code contenteditable>
+    var sum = function sum(n) {
+      if (!n)
+        return 0;
+      return n + sum(n - 1);
+    };
+    console.log(sum(4)); // #=> 10
+    var sum2 = sum;
+    sum = function () {
+      return 0;
+    };
+    console.log(sum(4)); // #=> 0
+    console.log(sum2(4)); // #=> 10
+  </code></pre>
+</section>
+
+<section>
+  <h2>IIFEs</h2>
+  <h4>(this is what we call idiomatic)</h4>
+  <pre><code contenteditable>
+    var x = +function(x) {return x;}('11'),
+        y = 22,
+        z = void function(z) {y+=z; return z;}(y);
+    console.log(x);
+    console.log(y);
+    console.log(z);
+  </code></pre>
+</section>
+
+<section>
+  <h2>IIFEs</h2>
+  <h4>(this is what we call idiomatic)</h4>
+  <pre><code contenteditable>
+    var x = +function(x) {return x;}('11'),
+        y = 22,
+        z = void function(z) {y+=z; return z;}(y);
+    console.log(x); // #=> 11 (number)
+    console.log(y); // #=> 44 (number)
+    console.log(z); // #=> undefined
+  </code></pre>
+</section>
+
+<section>
+  <h2>Modules using IIFEs</h2>
+  <h4>(this is what we call idiomatic)</h4>
+  <pre class="fragment"><code contenteditable>
+    var pkg = function () {
+      var somePrivateVar="private";
+
+      function privateHelper() {}
+
+      return {
+        publicMethod:function() {
+        },
+        otherPublicMethod:function() {
+        }
+      };
+    }();
+  </code></pre>
+</section>
+
+<section>
+  <h2>Closures & Loops</h2>
+  <h4>(wrong)</h4>
+
+  <pre><code contenteditable>
+    function makeLoggersFor(arr) {
+      var size = arr.length, r = [];
+      for (var i = 0; i &lt; size; i++) {
+        r[i] = function () {
+          console.log(i, arr[i]);
+        };
+      }
+      return r;
+    }
+    var logs = makeLoggersFor([1, 2]);
+    logs[0]();
+    logs[1]();
+  </code></pre>
+</section>
+
+<section>
+  <h2>Closures & Loops</h2>
+  <h4>(sloppy but works)</h4>
+
+  <pre><code contenteditable>
+    function makeLoggersFor(arr) {
+      var size = arr.length, r = [];
+      for (var i = 0; i &lt; size; i++) {
+        r[i] = function (i, el) {
+          return function () {
+            console.log(i, el);
+          };
+        }(i, arr[i]);
+      }
+      return r;
+    }
+    var logs = makeLoggersFor([1, 2]);
+    logs[0]();
+    logs[1]();
+  </code></pre>
+</section>
+
+<section>
+  <h2>Closures & Loops</h2>
+  <h4>(idiomatic)</h4>
+
+  <pre><code contenteditable>
+    function makeLoggersFor(arr) {
+      return arr.map(function (el, i) {
+        return function () {
+          console.log(i, el);
+        };
+      });
+    }
+    var logs = makeLoggersFor([1, 2]);
+    logs[0]();
+    logs[1]();
+  </code></pre>
+</section>
+
+<section>
+  <h2>Closures & Loops</h2>
+  <h4>(non leaky)</h4>
+
+  <pre><code contenteditable>
+    var makeLoggersWithStyleFor = function () {
+      function makeLogger(el, i) {
+        return function () {
+          console.log(i, el);
+        };
+      }
+
+      return function (arr) {
+        return arr.map(makeLogger);
+      };
+    }();
+    var logs = makeLoggersWithStyleFor([1, 2]);
+    logs[0]();
+    logs[1]();
+  </code></pre>
+</section>
+
+<section>
+  <h2>No methods</h2>
+  <h4>(freedom for the functions)</h4>
+
+  <pre><code contenteditable>
+    var thisIsAnObject = {
+      name: 'pepe',
+      sayHi: function(msg) {
+        console.log("Hi, I'm ", this.name, msg);
+      }
+    };
+    var otherObject = {
+      name: 'john',
+      sayBye: thisIsAnObject.sayHi
+    };
+    thisIsAnObject.sayBye('!!!');
+    otherObject.sayBye('?');
+  </code></pre>
+</section>
+
+<section>
+  <h2>This</h2>
+  <h4>(where it is?)</h4>
+
+  <pre><code contenteditable>
+    var thisIsAnObject = {
+      name: 'pepe',
+      sayHi: function(msg) {
+        console.log("Hi, I'm ", this.name, msg);
+      }
+    }, otherObject = { name: 'john' };
+    var speak=thisIsAnObject.sayHi;
+    speak('nice to meet you');
+    speak.call(otherObject, 'nice to meet you');
+    speak.apply(otherObject, ['nice to meet you']);
+  </code></pre>
+</section>
+
+<section class="separata">
+  <hgroup>
+    <h2>Conclusions</h2>
+
+    <h3>(learn JS)</h3>
+  </hgroup>
+  <figure>
+    <img src="./img/notes.jpg">
+    <figcaption>
+      <span>Original by Mike Ambs: </span>
+      <a href="http://www.flickr.com/photos/mike_1630/1227622542/"
+         target="_blank">http://bit.ly/10IWmrY</a>
+    </figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>They will not save you</h2>
+  <h4>(no silver bullet)</h4>
+
+  <ul>
+    <li class="fragment">Frameworks don't solve these problems</li>
+    <li class="fragment">CoffeeScript !== JavaScript</li>
+    <li class="fragment">but CoffeeScript == JavaScript</li>
+  </ul>
+</section>
+
+<section>
+  <h2>CoffeeScript</h2>
+  <h4>(the popular kid)</h4>
+
+  <ul>
+    <li>Better syntax (for Ruby & Python people)</li>
+    <li>Cool features (strings, splat, comprehensions, etc)</li>
+    <li>No hoisting WTF</li>
+    <li>No global variables</li>
+    <li>Safe <span class="snippet">undefined</span></li>
+    <li><span class="snippet">==</span> is always
+      <span class="snippet">===</span></li>
+    <li>Neither <span class="snippet">void </span>nor<span
+            class="snippet"> comma</span> operators</li>
+    <li>Fat arrow (<span class="snippet">=></span>) preserves <span
+            class="snippet">this</span></li>
+  </ul>
+</section>
+
+<section>
+  <h2>CoffeeScript</h2>
+  <h4>(the nasty truth)</h4>
+
+  <ul>
+    <li class="fragment">Type conversion hell</li>
+    <li class="fragment">Mostly syntax sugar</li>
+    <li class="fragment">Almost the same semantics that JS</li>
+    <li class="fragment">Most of its cool features in ES6</li>
+  </ul>
+</section>
+
+<section>
+  <h2>CoffeeScript WTF!!</h2>
+  <h4>(it can't be!!)</h4>
+
+  <pre><code contenteditable>
+    john =
+      name: 'John'
+      salutator: ->
+        console.log _this
+        _this = 'not this anymore'
+        console.log _this
+        (msg = 'Hi') => console.log msg + ' ' + @name
+
+    johnSalutator = john.salutator()
+    johnSalutator 'Bye, bye'
+  </code></pre>
+</section>
+
+<section>
+  <h2>CoffeeScript WTF!!</h2>
+  <h4>(it can't be!!)</h4>
+
+  <pre><code contenteditable>
+    john =
+      name: 'John'
+      salutator: ->
+        console.log _this //> {...this object..}
+        _this = 'not this anymore'
+        console.log _this //> 'not this anymore'
+        (msg = 'Hi') => console.log msg + ' ' + @name
+
+    johnSalutator = john.salutator()
+    johnSalutator 'Bye, bye' //> 'Bye, bye undefined'
+  </code></pre>
+</section>
+
+<section>
+  <h2>CoffeeScript WTF!!</h2>
+  <h4>(still has JS inside)</h4>
+
+  <p>Does the Coffee spec say something about this?</p>
+  <pre><code contenteditable>
+  console.log !new Boolean(false) //> false
+  console.log 1 + !new Boolean(false) - true //> 0
+  // The result of the following depends on the browser
+  console.log parseInt 1 + !new Boolean(false) - true + "10"
+  // Prints either 8 or 10
+  </code></pre>
+  <p>You cannot understand what's happening...</p>
+  <p class="fragment">...unless you know JS</p>
+</section>
+
+<section>
+  <h2>JavaScript</h2>
+  <h4>(some cursed features)</h4>
+
+  <ul>
+    <li class="snippet">ToPrimitive</li>
+    <li>Operators:<span class="snippet"> +, ==</span></li>
+  <!--  <li>Operators:<span class="snippet"> &&, || </span>(tolerable)</li> -->
+    <li>Hoisting</li>
+    <li>Ancient syntax</li>
+    <li>Some broken functions in the library
+      <p>(<span class="snippet">parseInt, Date, etc.</span>)</p></li>
+    <li class="fragment">No plans for deprecation</li>
+    <li class="fragment">The rest of JS is pretty good!</li>
+  </ul>
+</section>
+
+<section>
+  <h2>JavaScript</h2>
+  <h4>(surrender & join the dark side!)</h4>
+
+  <ul>
+    <li>You are forced to use it anyway</li>
+    <li>Knowing only CoffeeScript is not enough</li>
+    <li>Learn JS semantics!!!</li>
+    <li>Use some code analysis tool (JSHint/Lint,
+      google closure, etc.)</li>
+  </ul>
+</section>
+
+<section class="separata">
+  <hgroup>
+    <h1>The End</h1>
+
+    <h2>Some questions?</h2>
+  </hgroup>
+  <figure>
+    <img src="./img/questions.jpg">
+    <figcaption>
+      <span>Original by Ethan Lofton: </span>
+      <a href="http://www.flickr.com/photos/eleaf/2536358399/"
+         target="_blank">http://bit.ly/1arHGj</a>
+    </figcaption>
+  </figure>
+</section>
+
+</div>
+
+</div>
+
+
+<script src="reveal.js-2.1/lib/js/head.min.js"></script>
+<script src="reveal.js-2.1/js/reveal.min.js"></script>
+
+<script>
+
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+
+    theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+    transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/none
+
+    // Optional libraries used to extend on reveal.js
+    dependencies: [
+      { src: 'reveal.js-2.1/lib/js/classList.js', condition: function () {
+        return !document.body.classList;
+      } },
+      { src: 'reveal.js-2.1/plugin/markdown/showdown.js', condition: function () {
+        return !!document.querySelector('[data-markdown]');
+      } },
+      { src: 'reveal.js-2.1/plugin/markdown/markdown.js', condition: function () {
+        return !!document.querySelector('[data-markdown]');
+      } },
+      { src: 'reveal.js-2.1/plugin/highlight/highlight.js', async: true, callback: function () {
+        hljs.initHighlightingOnLoad();
+      } },
+      { src: 'reveal.js-2.1/plugin/zoom-js/zoom.js', async: true, condition: function () {
+        return !!document.body.classList;
+      } },
+      { src: 'reveal.js-2.1/plugin/notes/notes.js', async: true, condition: function () {
+        return !!document.body.classList;
+      } }
+    ]
+  });
+
+</script>
+
+</body>
+</html>
