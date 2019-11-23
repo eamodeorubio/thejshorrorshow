@@ -569,10 +569,10 @@
   <ol class="snippet">
     <li class="fragment">(unary) +a -> Number(a)</li>
     <li class="fragment">a + "hola" -> String(a) + "hola"</li>
-    <li class="fragment">"hola" + a -> "hola" + String(b)</li>
+    <li class="fragment">"hola" + b -> "hola" + String(b)</li>
     <li class="fragment">a + 6 -> Number(a) + 6</li>
-    <li class="fragment">6 + a -> 6 + Number(b)</li><li class="fragment">a + b
-    <p>-> ToPrimitive(a) + ToPrimitive(b)</p></li>
+    <li class="fragment">6 + b -> 6 + Number(b)</li>
+    <li class="fragment">a + b -> ToPrimitive(a) + ToPrimitive(b)</li>
   </ol>
 </section>
 
